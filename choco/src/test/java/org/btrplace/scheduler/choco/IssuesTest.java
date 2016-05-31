@@ -542,4 +542,17 @@ public class IssuesTest {
         Assert.assertNotNull(p);
         System.out.println(p);
     }
+
+    @Test
+    public void testIssue117() throws Exception {
+        String buf = "{\"model\":{\"mapping\":{\"readyVMs\":[5,4],\"onlineNodes\":{\"0\":{\"sleepingVMs\":[],\"runningVMs\":[0]},\"1\":{\"sleepingVMs\":[],\"runningVMs\":[1]},\"2\":{\"sleepingVMs\":[],\"runningVMs\":[3,2]}},\"offlineNodes\":[]},\"attributes\":{\"nodes\":{},\"vms\":{\"4\":{\"placeHolder\":true},\"5\":{\"placeHolder\":true}}},\"views\":[{\"defConsumption\":2,\"nodes\":{},\"rcId\":\"mem\",\"id\":\"shareableResource\",\"defCapacity\":6,\"vms\":{\"1\":4,\"4\":4,\"5\":2}},{\"defConsumption\":2,\"nodes\":{},\"rcId\":\"cpu\",\"id\":\"shareableResource\",\"defCapacity\":6,\"vms\":{\"0\":4,\"1\":4,\"4\":4,\"5\":2}}]},\"constraints\":[{\"vm\":4,\"continuous\":false,\"id\":\"running\"},{\"continuous\":false,\"id\":\"spread\",\"vms\":[1,3,4]},{\"vm\":5,\"continuous\":false,\"id\":\"running\"}],\"objective\":{\"id\":\"minimizeMTTR\"}}\n";
+        StringReader r = new StringReader(buf);
+        Instance i = JSON.readInstance(r);
+        ChocoScheduler s = new DefaultChocoScheduler();
+        ReconfigurationPlan p = s.solve(i);
+        SolvingStatistics stats = s.getStatistics();
+        System.out.println(stats);
+        Assert.assertNotNull(p);
+        System.out.println(p);
+    }
 }
